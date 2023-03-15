@@ -24,6 +24,7 @@
         <td th:text="${superhero.realName}"/>
         <td th:text="${superhero.creationDate}"/>
         <td>
+            <a th:href="@{/superhero/superpower/{heroName}(heroName=${superhero.heroName})}">View Superpowers</a>
         </td>
     </tr>
     </tbody>

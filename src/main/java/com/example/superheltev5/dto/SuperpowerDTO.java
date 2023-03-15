@@ -1,15 +1,19 @@
 package com.example.superheltev5.dto;
 
+import com.example.superheltev5.models.Superpower;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SuperpowerDTO {
     private String heroName;
     private String realName;
-    private String superpowers;
+    private List<Superpower> superpowers = new ArrayList<>();
     private int numberOfSuperpowers;
 
-    public SuperpowerDTO(String heroName, String realName, String superpowers) {
+    public SuperpowerDTO(String heroName, String realName) {
         this.heroName = heroName;
         this.realName = realName;
-        this.superpowers = superpowers;
     }
 
     public String getHeroName() {
@@ -28,11 +32,11 @@ public class SuperpowerDTO {
         this.realName = realName;
     }
 
-    public String getSuperpowers() {
+    public List<Superpower> getSuperpowers() {
         return superpowers;
     }
 
-    public void setSuperpowers(String superpowers) {
-        this.superpowers = superpowers;
+    public void addSuperpower(Superpower superpower) {
+        this.superpowers.add(superpower);
     }
 }

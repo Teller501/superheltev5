@@ -4,6 +4,7 @@ import com.example.superheltev5.dto.HeroCityDTO;
 import com.example.superheltev5.dto.HeroDTO;
 import com.example.superheltev5.dto.SuperpowerCountDTO;
 import com.example.superheltev5.dto.SuperpowerDTO;
+import com.example.superheltev5.models.Superpower;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -78,20 +79,29 @@ public class DBRepository implements IRepository{
     public List<SuperpowerDTO> getSuperpowersByHeroName(String heroName) {
         heroSuperpowers = new ArrayList<>();
         try (Connection conn = DBManager.getConnection()) {
-            String sql = "SELECT superhero.heroname, superhero.realname, GROUP_CONCAT(superpower.name SEPARATOR ', ') AS superpowers " +
-                    "FROM superhero " +
+            String sql = "SELECT superhero.heroname, superhero.realname, superpower.id, superpower.name FROM superhero " +
                     "JOIN superheropower ON superhero.id = superheropower.heroid " +
-                    "JOIN superpower ON superheropower.superpowerid = superpower.id WHERE superhero.heroname = ?" +
-                    "GROUP BY superhero.heroname, superhero.realname ";
+                    "JOIN superpower ON superheropower.superpowerid = superpower.id WHERE superhero.heroname = ? " +
+                    "GROUP BY superhero.heroname, superhero.realname, superpower.id, superpower.name";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, heroName);
             ResultSet rs = stmt.executeQuery();
 
+            SuperpowerDTO hero = null;
             while (rs.next()) {
                 String name = rs.getString("heroname");
                 String realName = rs.getString("realname");
-                String superpowers = rs.getString("superpowers");
-                SuperpowerDTO hero = new SuperpowerDTO(name,realName,superpowers);
+                String powerName = rs.getString("name");
+                int powerID = rs.getInt("id");
+                if (hero == null || !hero.getHeroName().equals(name)) {
+                    if (hero != null) {
+                        heroSuperpowers.add(hero);
+                    }
+                    hero = new SuperpowerDTO(name, realName);
+                }
+                hero.addSuperpower(new Superpower(powerID, powerName));
+            }
+            if (hero != null) {
                 heroSuperpowers.add(hero);
             }
 
@@ -107,19 +117,28 @@ public class DBRepository implements IRepository{
     public List<SuperpowerDTO> getSuperpowers() {
         heroSuperpowers = new ArrayList<>();
         try (Connection conn = DBManager.getConnection()) {
-            String sql = "SELECT superhero.heroname, superhero.realname, GROUP_CONCAT(superpower.name SEPARATOR ', ') AS superpowers " +
-                    "FROM superhero " +
+            String sql = "SELECT superhero.heroname, superhero.realname, superpower.id, superpower.name FROM superhero " +
                     "JOIN superheropower ON superhero.id = superheropower.heroid " +
                     "JOIN superpower ON superheropower.superpowerid = superpower.id " +
-                    "GROUP BY superhero.heroname, superhero.realname ";
+                    "GROUP BY superhero.heroname, superhero.realname, superpower.id, superpower.name";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
+            SuperpowerDTO hero = null;
             while (rs.next()) {
                 String name = rs.getString("heroname");
                 String realName = rs.getString("realname");
-                String superpowers = rs.getString("superpowers");
-                SuperpowerDTO hero = new SuperpowerDTO(name,realName,superpowers);
+                String powerName = rs.getString("name");
+                int powerID = rs.getInt("id");
+                if (hero == null || !hero.getHeroName().equals(name)) {
+                    if (hero != null) {
+                        heroSuperpowers.add(hero);
+                    }
+                    hero = new SuperpowerDTO(name, realName);
+                }
+                hero.addSuperpower(new Superpower(powerID, powerName));
+            }
+            if (hero != null) {
                 heroSuperpowers.add(hero);
             }
 

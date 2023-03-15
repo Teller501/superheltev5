@@ -1,5 +1,6 @@
 package com.example.superheltev5.controllers;
 
+import com.example.superheltev5.models.Superpower;
 import com.example.superheltev5.repositories.*;
 import com.example.superheltev5.dto.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,9 @@ public class SuperheroController {
     public String getSuperpowersByHeroName(@PathVariable String name, Model model) {
         List<SuperpowerDTO> superpowers = repository.getSuperpowersByHeroName(name);
         model.addAttribute("superpowers", superpowers);
+        for (SuperpowerDTO superpower : superpowers) {
+            model.addAttribute("powers", superpower.getSuperpowers());
+        }
         return "powers";
     }
 

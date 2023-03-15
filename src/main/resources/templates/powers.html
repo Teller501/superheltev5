@@ -5,8 +5,7 @@
   <title>Title</title>
   <link th:href="@{/main.css}" rel="stylesheet"></head>
 <body>
-<h1>Superhero Database</h1>
-<!-- Make a table that displays all superheroes -->
+
 <table class="table">
   <thead>
   <tr>
@@ -14,8 +13,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr th:each="superpower : ${superpowers}">
-    <td th:text="${superpower.superpowers}"/>
+  <tr th:each="power : ${powers}">
+    <td th:text="${power.name}"/>
   </tr>
   </tbody>
 </table>
