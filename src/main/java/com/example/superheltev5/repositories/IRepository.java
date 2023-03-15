@@ -1,8 +1,5 @@
 package com.example.superheltev5.repositories;
-import com.example.superheltev5.dto.HeroCityDTO;
-import com.example.superheltev5.dto.HeroDTO;
-import com.example.superheltev5.dto.SuperpowerCountDTO;
-import com.example.superheltev5.dto.SuperpowerDTO;
+import com.example.superheltev5.dto.*;
 
 import java.util.List;
 
@@ -16,5 +13,9 @@ public interface IRepository {
     List<SuperpowerCountDTO> getSuperpowersCount();
     List<HeroCityDTO> getHeroesAndCityByHeroName(String cityName);
     List<HeroCityDTO> getHeroesAndCity();
+    public List<String> getCities();
+    public List<String> getPowers();
+
+    public void addSuperHero(SuperheroFormDTO form);
 
 }

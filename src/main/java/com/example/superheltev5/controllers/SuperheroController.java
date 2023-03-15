@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -80,12 +82,18 @@ public class SuperheroController {
     }
 
     @GetMapping("/add")
-    public String showCreateHero(){
+    public String showCreateHero(Model model){
+        SuperheroFormDTO hero = new SuperheroFormDTO();
+        model.addAttribute("hero", hero);
+        model.addAttribute("cities", repository.getCities());
+        model.addAttribute("powers", repository.getPowers());
         return "add";
     }
 
     @PostMapping("/add")
     public String addHero(@ModelAttribute("hero") SuperheroFormDTO superheroFormDTO){
-        return "add";
+        repository.addSuperHero(superheroFormDTO);
+        System.out.println("added hero: " + superheroFormDTO.toString());
+        return "redirect:/superhero";
     }
 }

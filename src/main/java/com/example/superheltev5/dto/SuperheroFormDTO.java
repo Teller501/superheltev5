@@ -1,5 +1,8 @@
 package com.example.superheltev5.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,6 +13,7 @@ public class SuperheroFormDTO {
 
     private String realName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
     private String city;

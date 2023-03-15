@@ -1,16 +1,10 @@
 package com.example.superheltev5.repositories;
 
-import com.example.superheltev5.dto.HeroCityDTO;
-import com.example.superheltev5.dto.HeroDTO;
-import com.example.superheltev5.dto.SuperpowerCountDTO;
-import com.example.superheltev5.dto.SuperpowerDTO;
+import com.example.superheltev5.dto.*;
 import com.example.superheltev5.models.Superpower;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -253,5 +247,108 @@ public class DBRepository implements IRepository{
         }
 
         return heroCityList;
+    }
+
+    public void addSuperHero(SuperheroFormDTO form) {
+        try (Connection con = DBManager.getConnection()) {
+// ID's
+            int cityId = 0;
+            int heroId = 0;
+            List<Integer> powerIDs = new ArrayList<>();
+
+// find city_id
+            String SQL1 = "select cityid from city where name = ?;";
+
+            PreparedStatement pstmt = con.prepareStatement(SQL1);
+            pstmt.setString(1, form.getCity());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                cityId = rs.getInt("cityid");
+            }
+
+// insert row in superhero table
+            String SQL2 = "insert into superhero (heroname, realname, creationdate, cityid) " +
+                    "values(?, ?, ?, ?);";
+
+            pstmt = con.prepareStatement(SQL2, Statement.RETURN_GENERATED_KEYS); // return autoincremented key
+            pstmt.setString(1, form.getHeroName());
+            pstmt.setString(2, form.getRealName());
+            pstmt.setDate(3, Date.valueOf(form.getCreationDate()));
+            pstmt.setInt(4, cityId);
+
+            int rows = pstmt.executeUpdate();
+            rs = pstmt.getGeneratedKeys();
+
+            if (rs.next()) {
+                heroId = rs.getInt(1);
+            }
+
+
+            String SQL3 = "select id from superpower where name = ?;";
+            pstmt = con.prepareStatement(SQL3);
+
+            for (String power : form.getPowerList()) {
+                pstmt.setString(1, power);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    powerIDs.add(rs.getInt("id"));
+                }
+            }
+
+            // insert entries in superhero_powers join table
+
+            String SQL4 = "insert into superheropower (heroid, superpowerid) values (?, ?);";
+            pstmt = con.prepareStatement(SQL4);
+
+            for (int i = 0; i < powerIDs.size(); i++) {
+                pstmt.setInt(1, heroId); // set the value of heroid
+                pstmt.setInt(2, powerIDs.get(i)); // set the value of superpowerid
+                pstmt.executeUpdate();
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public List<String> getCities(){
+        List<String> cities = new ArrayList<>();
+        try (Connection conn = DBManager.getConnection()) {
+            String sql = "SELECT name FROM city";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                cities.add(name);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cities;
+    }
+
+    public List<String> getPowers(){
+        List<String> powers = new ArrayList<>();
+        try (Connection conn = DBManager.getConnection()) {
+            String sql = "SELECT name FROM superpower";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                powers.add(name);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return powers;
     }
 }

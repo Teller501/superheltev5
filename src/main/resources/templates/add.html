@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Create Superhero</title>
+    <link th:href="@{/main.css}" rel="stylesheet"></head>
 </head>
 <body>
 <div align="center">
   <h1>Create Superhero</h1>
-  <form action="#" th:action="@{/add}" method="post" th:object="${hero}">
+  <form th:action="@{/superhero/add}" method="post" th:object="${hero}">
     <label>Hero name:</label>
     <input type="text" th:field="*{heroName}" /><br/>
 
@@ -19,13 +20,15 @@
 
 
     <label>City:</label>
-    <select th:field="">
-      <option th:each="p : ${listProfession}" th:value="${p}" th:text="${p}" />
+    <select th:field="*{city}">
+      <option value="">--Please select--</option>
+      <option th:each="city : ${cities}" th:value="${city}" th:text="${city}"></option>
     </select>
     <br/>
 
-    <label>Superpowers:</label>
-    <input type="checkbox" th:field="" /><br/>
+    <div th:each="power : ${powers}">
+      <input type="checkbox" th:field="*{powerList}" th:value="${power}" th:text="${power}" />
+    </div>
 
 
     <button type="submit">Register</button>
