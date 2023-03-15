@@ -78,4 +78,14 @@ public class SuperheroController {
         List<HeroCityDTO> heroesAndCities = repository.getHeroesAndCity();
         return new ResponseEntity<>(heroesAndCities, HttpStatus.OK);
     }
+
+    @GetMapping("/add")
+    public String showCreateHero(){
+        return "add";
+    }
+
+    @PostMapping("/add")
+    public String addHero(@ModelAttribute("hero") SuperheroFormDTO superheroFormDTO){
+        return "add";
+    }
 }
