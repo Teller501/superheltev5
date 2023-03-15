@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/main.css}" rel="stylesheet"></head>
+<body>
+<h1>Superhero Database</h1>
+<!-- Make a table that displays all superheroes -->
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Hero Name</th>
+        <th scope="col">Real Name</th>
+        <th scope="col">Creation Date</th>
+        <th scope="col">Powers</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="superhero : ${heroes}">
+        <td th:text="${superhero.id}"/>
+        <td th:text="${superhero.heroName}"/>
+        <td th:text="${superhero.realName}"/>
+        <td th:text="${superhero.creationDate}"/>
+        <td>
+            <!-- make a button, NOT A FORM!!! for each superhero, when tapped, show the selected superhero powers by linking to example /superhero/superpower/Batman -->
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+</body>
+</html>
