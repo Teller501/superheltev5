@@ -1,0 +1,46 @@
+/* Use a modern sans-serif font */
+body {
+    font-family: 'Montserrat', sans-serif;
+    max-width: 900px;
+    margin: auto;
+    padding: 10px;
+    background-color: #f2f2f2;
+    color: #333333;
+}
+
+h1 {
+    background: linear-gradient(to right, #F5F5DC, #FFFFFF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: #333333;
+    font-size: 40px;
+    text-align: center;
+    margin: 0;
+    padding: 20px 0;
+}
+
+p {
+    font-size: 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+a {
+    display: block;
+    max-width: 200px;
+    margin: auto;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: #9c7c40;
+    color: #ffffff;
+    text-decoration: none;
+    border: none;
+}
+
+a:hover {
+    background-color: #d4a45a;
+}
+
+a:focus, a:active, a:visited {
+    border: none;
+}
