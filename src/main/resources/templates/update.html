@@ -9,13 +9,13 @@
 <h1 th:text="*{hero.heroName}"></h1>
 <form action="/superhero/update" method="post" th:object="${hero}">
 
-  <input name="heroId" th:value="*{heroId}">
+  <input name="heroId" type="hidden" th:value="*{heroId}">
 
   <label for="heroname-field">Hero name: </label>
-  <input id="heroname-field" name="heroName" th:value="${hero.heroName}">
+  <input id="heroname-field" name="heroName" type="text" th:value="${hero.heroName}">
 
   <label for="name-field">Real name: </label>
-  <input id="name-field" name="realName" th:value="${hero.realName}">
+  <input id="name-field" name="realName" type="text" th:value="${hero.realName}">
 
   <label for="date-field">Creation date: </label>
   <input id="date-field" type="date" name="creationDate" th:value="${hero.creationDate}">
