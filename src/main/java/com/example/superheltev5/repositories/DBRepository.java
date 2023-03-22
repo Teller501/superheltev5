@@ -317,6 +317,8 @@ public class DBRepository implements IRepository{
 
             }
 
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -423,14 +425,37 @@ public class DBRepository implements IRepository{
             }
 
             String SQL2 = "UPDATE superhero SET heroname = ?, realname = ?, creationdate = ?, cityid = ? WHERE id = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(SQL2)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL2);
                 stmt.setString(1, hero.getHeroName());
                 stmt.setString(2, hero.getRealName());
                 stmt.setDate(3, Date.valueOf(hero.getCreationDate()));
                 stmt.setInt(4, cityId);
                 stmt.setInt(5, hero.getHeroId());
                 stmt.executeUpdate();
+
+            String SQL3 = "select id from superpower where name = ?;";
+            pstmt = conn.prepareStatement(SQL3);
+
+            for (String power : hero.getPowerList()) {
+                pstmt.setString(1, power);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    powerIDs.add(rs.getInt("id"));
+                }
             }
+
+            // update entries in superhero_powers join table
+
+            String SQL4 = "INSERT INTO superheropower (heroid, superpowerid) VALUES (?, ?);";
+            pstmt = conn.prepareStatement(SQL4);
+
+            for (int i = 0; i < powerIDs.size(); i++) {
+                pstmt.setInt(1, hero.getHeroId()); // set the value of heroid
+                pstmt.setInt(2, powerIDs.get(i)); // set the value of superpowerid
+                pstmt.executeUpdate();
+            }
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
