@@ -14,6 +14,7 @@ public class DBManager {
 
     public static Connection getConnection(){
 
+
         String username = null;
         String password = null;
         String url = null;
