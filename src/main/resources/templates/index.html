@@ -26,9 +26,9 @@
         <td th:text="${superhero.realName}"/>
         <td th:text="${superhero.creationDate}"/>
         <td>
-            <a th:href="@{/superhero/superpower/{heroName}(heroName=${superhero.heroName})}">View Superpowers</a>
+            <a th:href="@{/superhero/superpower/{heroName}(heroName=${superhero.heroName})}">View Powers</a>
         </td>
-        <td><a th:href="@{'/superhero/update/' + ${superhero.id}}">Opdater</a></td>
+        <td><a th:href="@{'/superhero/update/' + ${superhero.id}}">Update</a></td>
         <td><a th:href="@{'/superhero/delete/' + ${superhero.id}}">Delete</a></td>
     </tr>
     </tbody>

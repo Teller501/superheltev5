@@ -105,4 +105,22 @@ public class SuperheroController {
         return "redirect:/superhero"; // PGR pattern
     }
 
+    @GetMapping("/update/{id}")
+    public String showUpdateProduct(@PathVariable("id") int updateId, Model model){
+        //hent produkt id fra repo og læg i model
+        model.addAttribute("hero", repository.findSuperheroById(updateId));
+        model.addAttribute("cities", repository.getCities());
+        model.addAttribute("powers", repository.getPowers());
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String updateProduct(@ModelAttribute SuperheroFormDTO hero){
+        repository.updateHero(hero);
+        System.out.println("updated" + hero.getHeroId());
+        return "redirect:/superhero";	// PGR pattern
+    }
+
+
+
 }

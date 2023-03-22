@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/form.css}" rel="stylesheet"></head>
+</head>
+<body>
+<h1 th:text="*{hero.heroName}"></h1>
+<form action="/superhero/update" method="post" th:object="${hero}">
+
+  <input name="heroId" th:value="*{heroId}">
+
+  <label for="heroname-field">Hero name: </label>
+  <input id="heroname-field" name="heroName" th:value="${hero.heroName}">
+
+  <label for="name-field">Real name: </label>
+  <input id="name-field" name="realName" th:value="${hero.realName}">
+
+  <label for="date-field">Creation date: </label>
+  <input id="date-field" type="date" name="creationDate" th:value="${hero.creationDate}">
+
+  <label>City:</label>
+  <select th:field="*{city}">
+    <option value="">--Please select--</option>
+    <option th:each="city : ${cities}" th:value="${city}" th:text="${city}"></option>
+  </select>
+  <br/>
+
+  <div th:each="power : ${powers}">
+    <input type="checkbox" th:field="*{powerList}" th:value="${power}" th:text="${power}" />
+  </div>
+
+  <button type="submit">Update hero</button>
+</form>
+
+</body>
+</html>

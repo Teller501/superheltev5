@@ -4,6 +4,14 @@ public class City {
     private int cityID;
     private String name;
 
+    public City(int cityID, String name) {
+        this.cityID = cityID;
+        this.name = name;
+    }
+
+    public City() {
+    }
+
     public int getCityID() {
         return cityID;
     }

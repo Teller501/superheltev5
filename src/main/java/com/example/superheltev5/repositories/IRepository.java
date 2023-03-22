@@ -1,5 +1,7 @@
 package com.example.superheltev5.repositories;
 import com.example.superheltev5.dto.*;
+import com.example.superheltev5.models.City;
+import com.example.superheltev5.models.Superhero;
 
 import java.util.List;
 
@@ -19,5 +21,13 @@ public interface IRepository {
     public void addSuperHero(SuperheroFormDTO form);
 
     public void deleteProductById(int id);
+
+    SuperheroFormDTO findSuperheroById(int id);
+
+    City findCityById(int id);
+
+    List<String> findPowersByHeroId(int id);
+
+    void updateHero(SuperheroFormDTO hero);
 
 }

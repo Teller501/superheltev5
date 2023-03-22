@@ -1,6 +1,8 @@
 package com.example.superheltev5.repositories;
 
 import com.example.superheltev5.dto.*;
+import com.example.superheltev5.models.City;
+import com.example.superheltev5.models.Superhero;
 import com.example.superheltev5.models.Superpower;
 import org.springframework.stereotype.Repository;
 
@@ -334,6 +336,106 @@ public class DBRepository implements IRepository{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public SuperheroFormDTO findSuperheroById(int id) {
+        SuperheroFormDTO superhero = null;
+        try {
+            Connection conn = DBManager.getConnection();
+            String SQL = "SELECT * FROM superhero WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
+                stmt.setInt(1, id);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    superhero = new SuperheroFormDTO();
+                    superhero.setHeroName(rs.getString("heroname"));
+                    superhero.setRealName(rs.getString("realname"));
+                    superhero.setCreationDate(rs.getDate("creationdate").toLocalDate());
+                    int cityID = rs.getInt("cityid");
+                    superhero.setCity(findCityById(cityID).getName());
+                    superhero.setPowerList(findPowersByHeroId(id));
+                    superhero.setHeroId(id);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return superhero;
+    }
+
+    @Override
+    public City findCityById(int id) {
+        City city = null;
+        try {
+            Connection conn = DBManager.getConnection();
+            String SQL = "SELECT * FROM city WHERE cityid = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
+                stmt.setInt(1, id);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    city = new City();
+                    city.setCityID(rs.getInt("cityid"));
+                    city.setName(rs.getString("name"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return city;
+    }
+
+    @Override
+    public List<String> findPowersByHeroId(int heroId) {
+        List<String> powers = new ArrayList<>();
+        try {
+            Connection conn = DBManager.getConnection();
+            String SQL = "SELECT sp.name FROM superheropower shp JOIN superpower sp ON shp.superpowerid = sp.id WHERE shp.heroid = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
+                stmt.setInt(1, heroId);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    powers.add(rs.getString("name"));
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return powers;
+    }
+
+    @Override
+    public void updateHero(SuperheroFormDTO hero) {
+        try{
+            Connection conn = DBManager.getConnection();
+
+            int cityId = 0;
+            List<Integer> powerIDs = new ArrayList<>();
+
+// find city_id
+            String SQL1 = "select cityid from city where name = ?;";
+
+            PreparedStatement pstmt = conn.prepareStatement(SQL1);
+            pstmt.setString(1, hero.getCity());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                cityId = rs.getInt("cityid");
+            }
+
+            String SQL2 = "UPDATE superhero SET heroname = ?, realname = ?, creationdate = ?, cityid = ? WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(SQL2)) {
+                stmt.setString(1, hero.getHeroName());
+                stmt.setString(2, hero.getRealName());
+                stmt.setDate(3, Date.valueOf(hero.getCreationDate()));
+                stmt.setInt(4, cityId);
+                stmt.setInt(5, hero.getHeroId());
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public List<String> getCities(){
         List<String> cities = new ArrayList<>();
