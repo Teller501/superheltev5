@@ -321,6 +321,20 @@ public class DBRepository implements IRepository{
 
     }
 
+    @Override
+    public void deleteProductById(int id) {
+        try {
+            Connection conn = DBManager.getConnection();
+            String SQL = "DELETE FROM superhero WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<String> getCities(){
         List<String> cities = new ArrayList<>();
         try {

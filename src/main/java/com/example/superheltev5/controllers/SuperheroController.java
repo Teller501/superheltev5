@@ -96,4 +96,13 @@ public class SuperheroController {
         System.out.println("added hero: " + superheroFormDTO.toString());
         return "redirect:/superhero";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable("id") int sletId){
+        repository.deleteProductById(sletId);
+        System.out.println("slettet: " + sletId);
+
+        return "redirect:/superhero"; // PGR pattern
+    }
+
 }

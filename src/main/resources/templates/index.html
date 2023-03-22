@@ -15,6 +15,8 @@
         <th scope="col">Real Name</th>
         <th scope="col">Creation Date</th>
         <th scope="col">Powers</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
@@ -26,6 +28,8 @@
         <td>
             <a th:href="@{/superhero/superpower/{heroName}(heroName=${superhero.heroName})}">View Superpowers</a>
         </td>
+        <td><a th:href="@{'/superhero/update/' + ${superhero.id}}">Opdater</a></td>
+        <td><a th:href="@{'/superhero/delete/' + ${superhero.id}}">Delete</a></td>
     </tr>
     </tbody>
 </table>

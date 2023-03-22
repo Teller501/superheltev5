@@ -18,4 +18,6 @@ public interface IRepository {
 
     public void addSuperHero(SuperheroFormDTO form);
 
+    public void deleteProductById(int id);
+
 }
