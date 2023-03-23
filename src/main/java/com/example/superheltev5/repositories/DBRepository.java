@@ -23,7 +23,7 @@ public class DBRepository implements IRepository{
     public List<HeroDTO> getHeroesByHeroName(String heroName) {
 
         heroes = new ArrayList<>();
-        try (Connection conn = DBManager.getConnection()) {
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT id, heroname, realname, creationdate FROM superhero WHERE heroname = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, heroName);
@@ -49,7 +49,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<HeroDTO> getAllHeroes() {
         heroes = new ArrayList<>();
-        try (Connection conn = DBManager.getConnection()) {
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT id, heroname, realname, creationdate FROM superhero";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
@@ -74,8 +74,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<SuperpowerDTO> getSuperpowersByHeroName(String heroName) {
         heroSuperpowers = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT superhero.heroname, superhero.realname, superpower.id, superpower.name FROM superhero " +
                     "JOIN superheropower ON superhero.id = superheropower.heroid " +
                     "JOIN superpower ON superheropower.superpowerid = superpower.id WHERE superhero.heroname = ? " +
@@ -113,8 +112,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<SuperpowerDTO> getSuperpowers() {
         heroSuperpowers = new ArrayList<>();
-        try{
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT superhero.heroname, superhero.realname, superpower.id, superpower.name FROM superhero " +
                     "JOIN superheropower ON superhero.id = superheropower.heroid " +
                     "JOIN superpower ON superheropower.superpowerid = superpower.id " +
@@ -150,8 +148,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<SuperpowerCountDTO> getSuperpowersCountByHeroName(String heroName) {
         superpowerCountList = new ArrayList<>();
-        try{
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT superhero.heroname, COUNT(superheropower.superpowerid) AS superpowersCount " +
                     "FROM superhero " +
                     "JOIN superheropower ON superhero.id = superheropower.heroid WHERE superhero.heroname = ?" +
@@ -177,8 +174,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<SuperpowerCountDTO> getSuperpowersCount() {
         superpowerCountList = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT superhero.heroname, COUNT(superheropower.superpowerid) AS superpowersCount " +
                     "FROM superhero " +
                     "JOIN superheropower ON superhero.id = superheropower.heroid " +
@@ -204,8 +200,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<HeroCityDTO> getHeroesAndCityByHeroName(String cityName) {
         heroCityList = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT city.name, GROUP_CONCAT(superhero.heroname SEPARATOR ', ') AS heroes " +
                     "FROM superhero " +
                     "JOIN city ON superhero.cityid = city.cityid WHERE city.name = ?" +
@@ -233,8 +228,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<HeroCityDTO> getHeroesAndCity() {
         heroCityList = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT city.name, GROUP_CONCAT(superhero.heroname SEPARATOR ', ') AS heroes " +
                     "FROM superhero " +
                     "JOIN city ON superhero.cityid = city.cityid " +
@@ -258,8 +252,7 @@ public class DBRepository implements IRepository{
     }
 
     public void addSuperHero(SuperheroFormDTO form) {
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
 // ID's
             int cityId = 0;
             int heroId = 0;
@@ -327,8 +320,7 @@ public class DBRepository implements IRepository{
 
     @Override
     public void deleteProductById(int id) {
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String SQL = "DELETE FROM superhero WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
                 stmt.setInt(1, id);
@@ -342,8 +334,7 @@ public class DBRepository implements IRepository{
     @Override
     public SuperheroFormDTO findSuperheroById(int id) {
         SuperheroFormDTO superhero = null;
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String SQL = "SELECT * FROM superhero WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
                 stmt.setInt(1, id);
@@ -368,8 +359,7 @@ public class DBRepository implements IRepository{
     @Override
     public City findCityById(int id) {
         City city = null;
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String SQL = "SELECT * FROM city WHERE cityid = ?";
             try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
                 stmt.setInt(1, id);
@@ -389,8 +379,7 @@ public class DBRepository implements IRepository{
     @Override
     public List<String> findPowersByHeroId(int heroId) {
         List<String> powers = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String SQL = "SELECT sp.name FROM superheropower shp JOIN superpower sp ON shp.superpowerid = sp.id WHERE shp.heroid = ?";
             try (PreparedStatement stmt = conn.prepareStatement(SQL)) {
                 stmt.setInt(1, heroId);
@@ -407,8 +396,7 @@ public class DBRepository implements IRepository{
 
     @Override
     public void updateHero(SuperheroFormDTO hero) {
-        try{
-            Connection conn = DBManager.getConnection();
+        try(Connection conn = DBManager.getInstance().getConnection()){
 
             int cityId = 0;
             List<Integer> powerIDs = new ArrayList<>();
@@ -464,8 +452,7 @@ public class DBRepository implements IRepository{
 
     public List<String> getCities(){
         List<String> cities = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT name FROM city";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
@@ -484,8 +471,7 @@ public class DBRepository implements IRepository{
 
     public List<String> getPowers(){
         List<String> powers = new ArrayList<>();
-        try {
-            Connection conn = DBManager.getConnection();
+        try (Connection conn = DBManager.getInstance().getConnection()){
             String sql = "SELECT name FROM superpower";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();

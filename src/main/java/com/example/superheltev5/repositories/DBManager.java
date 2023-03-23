@@ -10,11 +10,21 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBManager {
-    private static Connection connection = null;
 
-    public static Connection getConnection(){
+    private static DBManager instance = null;
+    private Connection conn = null;
 
+    private DBManager() {
+    }
 
+    public static DBManager getInstance() {
+        if (instance == null) {
+            instance = new DBManager();
+        }
+        return instance;
+    }
+
+    public Connection getConnection() throws SQLException {
         String username = null;
         String password = null;
         String url = null;
@@ -29,11 +39,9 @@ public class DBManager {
             e.printStackTrace();
         }
 
-        try{
-            connection = DriverManager.getConnection(url,username,password);
-        } catch(SQLException e){
-            e.printStackTrace();
+        if (conn == null || conn.isClosed()) {
+            conn = DriverManager.getConnection(url, username, password);
         }
-        return connection;
+        return conn;
     }
 }
